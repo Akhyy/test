@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Drupal\Tests\Core\DependencyInjection;
 
 use Drupal\Component\FileCache\FileCacheFactory;
@@ -93,7 +91,7 @@ services:
   _defaults:
     invalid: string
 YAML,
-        'The configuration key "invalid" cannot be used to define a default value in "vfs://drupal/modules/example/example.yml". Allowed keys are "public", "tags", "autowire", "autoconfigure".',
+        'The configuration key "invalid" cannot be used to define a default value in "vfs://drupal/modules/example/example.yml". Allowed keys are "public", "tags", "autowire".',
       ],
       'default tags must be an array' => [<<<YAML
 services:

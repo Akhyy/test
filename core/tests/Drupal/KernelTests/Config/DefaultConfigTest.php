@@ -15,7 +15,6 @@ use Drupal\KernelTests\KernelTestBase;
  * Tests that the installed config matches the default config.
  *
  * @group Config
- * @group #slow
  */
 class DefaultConfigTest extends KernelTestBase {
 

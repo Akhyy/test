@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Drupal\Tests\Core\DrupalKernel;
 
 use Drupal\Core\DrupalKernel;
@@ -170,7 +168,7 @@ class FakeAutoloader {
   }
 
   /**
-   * Deregisters this instance as an autoloader.
+   * Unregisters this instance as an autoloader.
    */
   public function unregister() {
     spl_autoload_unregister([$this, 'loadClass']);

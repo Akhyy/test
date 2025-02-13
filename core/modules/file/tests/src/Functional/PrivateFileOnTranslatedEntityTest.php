@@ -4,7 +4,6 @@ namespace Drupal\Tests\file\Functional;
 
 use Drupal\file\Entity\File;
 use Drupal\node\Entity\Node;
-use Drupal\Tests\content_translation\Traits\ContentTranslationTestTrait;
 
 /**
  * Uploads private files to translated node and checks access.
@@ -12,8 +11,6 @@ use Drupal\Tests\content_translation\Traits\ContentTranslationTestTrait;
  * @group file
  */
 class PrivateFileOnTranslatedEntityTest extends FileFieldTestBase {
-
-  use ContentTranslationTestTrait;
 
   /**
    * {@inheritdoc}
@@ -42,7 +39,7 @@ class PrivateFileOnTranslatedEntityTest extends FileFieldTestBase {
     $this->drupalCreateContentType(['type' => 'page', 'name' => 'Basic page']);
 
     // Create a file field on the "Basic page" node type.
-    $this->fieldName = $this->randomMachineName();
+    $this->fieldName = strtolower($this->randomMachineName());
     $this->createFileField($this->fieldName, 'node', 'page', ['uri_scheme' => 'private']);
 
     // Create and log in user.
@@ -60,11 +57,19 @@ class PrivateFileOnTranslatedEntityTest extends FileFieldTestBase {
     $this->drupalLogin($admin_user);
 
     // Add a second language.
-    static::createLanguageFromLangcode('fr');
+    $edit = [];
+    $edit['predefined_langcode'] = 'fr';
+    $this->drupalGet('admin/config/regional/language/add');
+    $this->submitForm($edit, 'Add language');
 
     // Enable translation for "Basic page" nodes.
-    static::enableContentTranslation('node', 'page');
-    static::setFieldTranslatable('node', 'page', $this->fieldName, 1);
+    $edit = [
+      'entity_types[node]' => 1,
+      'settings[node][page][translatable]' => 1,
+      "settings[node][page][fields][$this->fieldName]" => 1,
+    ];
+    $this->drupalGet('admin/config/regional/content-language');
+    $this->submitForm($edit, 'Save configuration');
   }
 
   /**

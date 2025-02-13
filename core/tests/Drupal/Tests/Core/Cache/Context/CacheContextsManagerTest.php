@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Drupal\Tests\Core\Cache\Context;
 
 use Drupal\Core\Cache\CacheableMetadata;
@@ -11,8 +9,6 @@ use Drupal\Core\Cache\Context\CalculatedCacheContextInterface;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Tests\UnitTestCase;
 use Symfony\Component\DependencyInjection\Container;
-
-// cspell:ignore cnenzrgre
 
 /**
  * @coversDefaultClass \Drupal\Core\Cache\Context\CacheContextsManager

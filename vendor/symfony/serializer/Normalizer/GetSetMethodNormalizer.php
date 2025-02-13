@@ -11,8 +11,7 @@
 
 namespace Symfony\Component\Serializer\Normalizer;
 
-use Symfony\Component\Serializer\Annotation\Ignore as LegacyIgnore;
-use Symfony\Component\Serializer\Attribute\Ignore;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 /**
  * Converts between objects with getter and setter methods and arrays.
@@ -39,7 +38,7 @@ use Symfony\Component\Serializer\Attribute\Ignore;
  */
 class GetSetMethodNormalizer extends AbstractObjectNormalizer
 {
-    private static array $setterAccessibleCache = [];
+    private static $setterAccessibleCache = [];
 
     public function getSupportedTypes(?string $format): array
     {
@@ -49,7 +48,7 @@ class GetSetMethodNormalizer extends AbstractObjectNormalizer
     /**
      * @param array $context
      */
-    public function supportsNormalization(mixed $data, ?string $format = null /* , array $context = [] */): bool
+    public function supportsNormalization(mixed $data, string $format = null /* , array $context = [] */): bool
     {
         return parent::supportsNormalization($data, $format) && $this->supports($data::class);
     }
@@ -57,7 +56,7 @@ class GetSetMethodNormalizer extends AbstractObjectNormalizer
     /**
      * @param array $context
      */
-    public function supportsDenormalization(mixed $data, string $type, ?string $format = null /* , array $context = [] */): bool
+    public function supportsDenormalization(mixed $data, string $type, string $format = null /* , array $context = [] */): bool
     {
         return parent::supportsDenormalization($data, $type, $format) && $this->supports($type);
     }
@@ -98,14 +97,14 @@ class GetSetMethodNormalizer extends AbstractObjectNormalizer
     private function isGetMethod(\ReflectionMethod $method): bool
     {
         return !$method->isStatic()
-            && !($method->getAttributes(Ignore::class) || $method->getAttributes(LegacyIgnore::class))
+            && !$method->getAttributes(Ignore::class)
             && !$method->getNumberOfRequiredParameters()
             && ((2 < ($methodLength = \strlen($method->name)) && str_starts_with($method->name, 'is'))
                 || (3 < $methodLength && (str_starts_with($method->name, 'has') || str_starts_with($method->name, 'get')))
             );
     }
 
-    protected function extractAttributes(object $object, ?string $format = null, array $context = []): array
+    protected function extractAttributes(object $object, string $format = null, array $context = []): array
     {
         $reflectionObject = new \ReflectionObject($object);
         $reflectionMethods = $reflectionObject->getMethods(\ReflectionMethod::IS_PUBLIC);
@@ -126,7 +125,7 @@ class GetSetMethodNormalizer extends AbstractObjectNormalizer
         return $attributes;
     }
 
-    protected function getAttributeValue(object $object, string $attribute, ?string $format = null, array $context = []): mixed
+    protected function getAttributeValue(object $object, string $attribute, string $format = null, array $context = []): mixed
     {
         $ucfirsted = ucfirst($attribute);
 
@@ -151,7 +150,7 @@ class GetSetMethodNormalizer extends AbstractObjectNormalizer
     /**
      * @return void
      */
-    protected function setAttributeValue(object $object, string $attribute, mixed $value, ?string $format = null, array $context = [])
+    protected function setAttributeValue(object $object, string $attribute, mixed $value, string $format = null, array $context = [])
     {
         $setter = 'set'.ucfirst($attribute);
         $key = $object::class.':'.$setter;

@@ -33,7 +33,6 @@ class ContentTranslationNewTranslationWithExistingRevisionsTest extends ContentT
    */
   protected function setUp(): void {
     parent::setUp();
-    $this->doSetup();
     $this->enableContentModeration();
   }
 

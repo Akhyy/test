@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\views\Kernel;
 
+use Drupal\Component\Render\FormattableMarkup;
 use Drupal\comment\Tests\CommentTestTrait;
 use Drupal\Component\Utility\Xss;
 use Drupal\node\Entity\NodeType;
@@ -133,7 +134,7 @@ class ViewExecutableTest extends ViewsKernelTestBase {
       if ($type == 'relationship') {
         continue;
       }
-      $this->assertGreaterThan(0, count($view->$type), "Make sure a $type instance got instantiated.");
+      $this->assertGreaterThan(0, count($view->$type), new FormattableMarkup('Make sure a %type instance got instantiated.', ['%type' => $type]));
     }
 
     // initHandlers() should create display handlers automatically as well.
@@ -346,7 +347,7 @@ class ViewExecutableTest extends ViewsKernelTestBase {
   }
 
   /**
-   * Tests the destructor to be sure that necessary objects are removed.
+   * Tests the deconstructor to be sure that necessary objects are removed.
    */
   public function testDestroy() {
     $view = Views::getView('test_destroy');
@@ -445,9 +446,9 @@ class ViewExecutableTest extends ViewsKernelTestBase {
     $count = 0;
     foreach ($view->displayHandlers as $id => $display) {
       $match = function ($value) use ($display) {
-        return str_contains((string) $value, $display->display['display_title']);
+        return str_contains($value, $display->display['display_title']);
       };
-      $this->assertNotEmpty(array_filter($validate[$id], $match), "Error message found for $id display");
+      $this->assertNotEmpty(array_filter($validate[$id], $match), new FormattableMarkup('Error message found for @id display', ['@id' => $id]));
       $count++;
     }
 

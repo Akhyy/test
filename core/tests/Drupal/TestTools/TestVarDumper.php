@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Drupal\TestTools;
 
 use Symfony\Component\VarDumper\Cloner\VarCloner;
